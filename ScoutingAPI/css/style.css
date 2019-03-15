@@ -1,0 +1,128 @@
+﻿body {
+}
+.top {
+    display: inline-block;
+    float: left;
+    clear: left;
+    text-align: right;
+}
+.inputTop {
+    display: inline-block;
+    float: left;
+}
+
+
+.navBardemoBasicUsage md-content .ext-content {
+    padding: 50px;
+    margin: 50px;
+    background-color: #FFF2E0;
+}
+
+.teamLogo {
+    float: left;
+    margin: auto;
+    margin-top: 10px;
+}
+
+.slide.ng-hide-add,
+.slide.ng-hide-remove {
+    -webkit-transition: all linear 0.5s;
+    -moz-transition: all linear 0.5s;
+    -o-transition: all linear 0.5s;
+    transition: all linear 0.5s;
+    display: block !important;
+}
+
+    .slide.ng-hide-add.ng-hide-add-active,
+    .slide.ng-hide-remove {
+        opacity: 0;
+    }
+
+        .slide.ng-hide-add,
+        .slide.ng-hide-remove.ng-hide-remove-active {
+            opacity: 1;
+        }
+
+.slider {
+    position: relative;
+    padding: 5px;
+    width: 610px;
+    margin: auto;
+    margin-top: 40px;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-shadow: 0px 0px 15px #999;
+}
+
+.arrows {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+    .arrows img {
+        height: 32px;
+        .slideshow-dots li.active a
+
+{
+    opacity: 1;
+}
+
+}
+
+.table {
+    width: 100vh;
+}
+
+table {
+    width: 100vh;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border-style: double;
+    border-width: thin;
+    border-color: black;
+}
+
+    table * {
+        box-sizing: inherit;
+        -moz-box-sizing: inherit;
+    }
+
+tbody {
+    overflow-y: scroll;
+    display: inline-block;
+}
+
+    thead > tr, tbody > tr, tfoot > tr {
+        text-align: left;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+thead, tfoot {
+    flex-shrink: 0;
+}
+
+th, tbody td {
+    width: 30%; /* this can vary */
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+}
+
+tfoot {
+    display: inline-block;
+}
+
+    tfoot td {
+        width: 100vh;
+        display: inline-block;
+    }

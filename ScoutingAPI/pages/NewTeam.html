@@ -1,0 +1,69 @@
+﻿<md-dialog>
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools" style="background-color:black;">
+                <h2>Add a New Team</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    X
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <label>Team Number: </label>
+                <input type="number" id="teamId">
+                <br />
+
+                <label>Team Name: &nbsp;&nbsp;&nbsp;</label>
+                <input type="text" id="name" />
+                <br /><br />
+
+                <label><u><b>Rocket</b></u></label> <br />
+                <label>Cargo: </label>
+                <label>High</label>
+                <input type="checkbox" id="R_C_High">
+                <label>Medium</label>
+                <input type="checkbox" id="R_C_Med">
+                <label>Low</label>
+                <input type="checkbox" id="R_C_Low">
+                <br />
+
+                <label>Hatchet: </label>
+                <label>High</label>
+                <input type="checkbox" id="R_H_High">
+                <label>Medium</label>
+                <input type="checkbox" id="R_H_Med">
+                <label>Low</label>
+                <input type="checkbox" id="R_H_Low">
+                <br /><br />
+
+                <label><u><b>Cargo Ship</b></u> </label><br />
+                <label>Hatchet: </label>
+                <input type="checkbox" id="C_Hatchet">
+                <label>Cargo: </label>
+                <input type="checkbox" id="C_Cargo">
+                <br />
+
+                <label>Cargo From Floor:</label>
+                <input type="checkbox" id="Cargo_floor" />
+                <label>Passive Hatchet:</label>
+                <input type="checkbox" id="Hatchet_passive" /><br />
+                <br />
+                <label>Comments:</label><br/>
+                <input style="height:50px; width:100%" type="text" id="comment" />
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="cancel()">
+                Cancel
+            </md-button>
+            <md-button ng-click="answer()">
+                Add
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

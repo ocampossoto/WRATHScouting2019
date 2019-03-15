@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Team2019.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="SCOUTING2019">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NUM" Type="int" Nullable="false" />
+          <Property Name="NAME" Type="varchar" MaxLength="200" />
+          <Property Name="RANK" Type="int" />
+          <Property Name="RCKT_HATCH_H" Type="tinyint" />
+          <Property Name="RCKT_HATCH_M" Type="tinyint" />
+          <Property Name="RCKT_HATCH_L" Type="tinyint" />
+          <Property Name="RCKT_CARGO_H" Type="tinyint" />
+          <Property Name="RCKT_CARGO_M" Type="tinyint" />
+          <Property Name="RCKT_CARGO_L" Type="tinyint" />
+          <Property Name="CARGO_SCORE" Type="tinyint" />
+          <Property Name="CARGO_HATCH" Type="tinyint" />
+          <Property Name="CLIMB1" Type="tinyint" />
+          <Property Name="CLIMB2" Type="tinyint" />
+          <Property Name="CLIMB3" Type="tinyint" />
+          <Property Name="CARGO_FLOOR" Type="tinyint" />
+          <Property Name="HATCH_PASS" Type="tinyint" />
+          <Property Name="Comments" Type="varchar" MaxLength="5000" />
+        </EntityType>
+        <EntityContainer Name="Team2019StoreContainer">
+          <EntitySet Name="SCOUTING2019" EntityType="Self.SCOUTING2019" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Team2019" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="SCOUTING2019">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NUM" Type="Int32" Nullable="false" />
+          <Property Name="NAME" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="RANK" Type="Int32" />
+          <Property Name="RCKT_HATCH_H" Type="Byte" />
+          <Property Name="RCKT_HATCH_M" Type="Byte" />
+          <Property Name="RCKT_HATCH_L" Type="Byte" />
+          <Property Name="RCKT_CARGO_H" Type="Byte" />
+          <Property Name="RCKT_CARGO_M" Type="Byte" />
+          <Property Name="RCKT_CARGO_L" Type="Byte" />
+          <Property Name="CARGO_SCORE" Type="Byte" />
+          <Property Name="CARGO_HATCH" Type="Byte" />
+          <Property Name="CLIMB1" Type="Byte" />
+          <Property Name="CLIMB2" Type="Byte" />
+          <Property Name="CLIMB3" Type="Byte" />
+          <Property Name="CARGO_FLOOR" Type="Byte" />
+          <Property Name="HATCH_PASS" Type="Byte" />
+          <Property Name="Comments" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="scoutingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SCOUTING2019" EntityType="Self.SCOUTING2019" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Team2019StoreContainer" CdmEntityContainer="scoutingEntities">
+          <EntitySetMapping Name="SCOUTING2019">
+            <EntityTypeMapping TypeName="Team2019.SCOUTING2019">
+              <MappingFragment StoreEntitySet="SCOUTING2019">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="NUM" ColumnName="NUM" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="RANK" ColumnName="RANK" />
+                <ScalarProperty Name="RCKT_HATCH_H" ColumnName="RCKT_HATCH_H" />
+                <ScalarProperty Name="RCKT_HATCH_M" ColumnName="RCKT_HATCH_M" />
+                <ScalarProperty Name="RCKT_HATCH_L" ColumnName="RCKT_HATCH_L" />
+                <ScalarProperty Name="RCKT_CARGO_H" ColumnName="RCKT_CARGO_H" />
+                <ScalarProperty Name="RCKT_CARGO_M" ColumnName="RCKT_CARGO_M" />
+                <ScalarProperty Name="RCKT_CARGO_L" ColumnName="RCKT_CARGO_L" />
+                <ScalarProperty Name="CARGO_SCORE" ColumnName="CARGO_SCORE" />
+                <ScalarProperty Name="CARGO_HATCH" ColumnName="CARGO_HATCH" />
+                <ScalarProperty Name="CLIMB1" ColumnName="CLIMB1" />
+                <ScalarProperty Name="CLIMB2" ColumnName="CLIMB2" />
+                <ScalarProperty Name="CLIMB3" ColumnName="CLIMB3" />
+                <ScalarProperty Name="CARGO_FLOOR" ColumnName="CARGO_FLOOR" />
+                <ScalarProperty Name="HATCH_PASS" ColumnName="HATCH_PASS" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
