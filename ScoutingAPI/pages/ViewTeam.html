@@ -2,7 +2,7 @@
     <form ng-cloak>
         <md-toolbar>
             <div class="md-toolbar-tools" style="background-color:black;">
-                <h2>Add a New Team</h2>
+                <h2>View Team</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
                     X
@@ -20,15 +20,15 @@
                 <input type="text" id="name" />
                 <br />
 
-                <!--<label>Rank: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                <input type="number" id="rank" readonly>-->
-                <br />
+                <label>Rank: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="number" id="rank" readonly>
+                <br /><br />
 
-                <label><u><b>Rocket:</b></u></label> <br />
+                <label><u><b>Rocket</b></u></label> <br />
                 <label>Cargo: </label>
                 <label>High</label>
                 <input type="checkbox" id="R_C_High">
-                <label>Med</label>
+                <label>Medium</label>
                 <input type="checkbox" id="R_C_Med">
                 <label>Low</label>
                 <input type="checkbox" id="R_C_Low">
@@ -37,7 +37,7 @@
                 <label>Hatchet: </label>
                 <label>High</label>
                 <input type="checkbox" id="R_H_High">
-                <label>Med</label>
+                <label>Medium</label>
                 <input type="checkbox" id="R_H_Med">
                 <label>Low</label>
                 <input type="checkbox" id="R_H_Low">
@@ -71,11 +71,14 @@
 
         <md-dialog-actions layout="row">
             <span flex></span>
-            <md-button  class="md-primary md-raised" style="background-color:black;" ng-click="cancel()">
+            <md-button class="md-primary md-raised" style="background-color:black;" ng-click="cancel()">
                 Cancel
             </md-button>
-            <md-button  class="md-primary md-raised" style="background-color:black;" ng-click="answer()">
-                Add
+            <md-button class="md-primary md-raised" style="background-color:red;" ng-click="delete()">
+                Delete
+            </md-button>
+            <md-button class="md-primary md-raised" style="background-color:green;" ng-click="answer()">
+                Update
             </md-button>
         </md-dialog-actions>
     </form>

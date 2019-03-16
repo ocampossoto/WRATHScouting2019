@@ -67,7 +67,6 @@
     .arrows img {
         height: 32px;
         .slideshow-dots li.active a
-
 {
     opacity: 1;
 }
@@ -112,7 +111,7 @@ thead, tfoot {
 }
 
 th, tbody td {
-    width: 30%; /* this can vary */
+    width: 50%; /* this can vary */
     overflow-x: hidden;
     text-overflow: ellipsis;
     display: inline-block;
@@ -122,7 +121,7 @@ tfoot {
     display: inline-block;
 }
 
-    tfoot td {
-        width: 100vh;
-        display: inline-block;
-    }
+tfoot td {
+    width: 100vh;
+    display: inline-block;
+}

@@ -211,8 +211,9 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="img\icons8-synchronize-30.png" />
+    <Content Include="img\Team_Logo.png" />
     <Content Include="Models\Team2019.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Team2019.edmx</DependentUpon>
@@ -224,6 +225,7 @@
       <LastGenOutput>Team2019.cs</LastGenOutput>
     </Content>
     <Content Include="pages\NewTeam.html" />
+    <Content Include="pages\ViewTeam.html" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-aria.js" />
@@ -251,6 +253,7 @@
     <Content Include="Scripts\angular-sanitize.min.js" />
     <Content Include="Scripts\angular-touch.js" />
     <Content Include="Scripts\angular-touch.min.js" />
+    <Content Include="favicon.ico" />
     <EntityDeploy Include="Models\Team2019.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Team2019.Designer.cs</LastGenOutput>

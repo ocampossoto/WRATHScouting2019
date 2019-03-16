@@ -4,6 +4,7 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
     $scope.firstName = "John";
     $scope.lastName = "Doe";
     $scope.status = "Good";
+    $scope.teamList = [];
     //var url = 'http://localhost:61505/api/SCOUTING2019';
     var url = 'https://scoutingdataapi.azurewebsites.net/api/SCOUTING2019';
     $scope.loadTeams = function () {
@@ -12,20 +13,20 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
             url: url
         }).then(function mySuccess(response) {
             $scope.teamList = [];
-            console.log(response.data[0]);
             var teams = response.data;
             for (var i = 0; i < teams.length; i++) {
                 //first generate the new object we need with the basic stuff
                 var team = $scope.teamConverion(teams[i]);
                 $scope.teamList.push(team);
             }
-
+            $scope.teamList.sort(function (a, b) { return a.RANK - b.RANK });
         }, function myError(response) {
-            console.log(response.statusText);
-        });
+            console.log(response);
+            });
+        
     }
     $scope.teamConverion = function (teams) {
-        var temp = { "NUM": teams.NUM, "NAME": teams.NAME, "COMMENTS": teams.Comments.substring(0, 10) + "..." };
+        var temp = { "ID": teams.Id, "NUM": teams.NUM, "RANK": teams.RANK, "COMMENTS": teams.Comments.substring(0, 10) + "..." };
         //check if we can do the rocket at all
         if (teams.RCKT_HATCH_H ||
             teams.RCKT_HATCH_M ||
@@ -47,14 +48,14 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
             temp.SHIP = "No";
         }
         //check what level we can climb
-        if (teams.CLIMB1) {
-            temp.HAB = "Level 1";
+        if (teams.CLIMB3) {
+            temp.HAB = "Level 3";
         }
         else if (teams.CLIMB2) {
             temp.HAB = "Level 2";
         }
-        else if (teams.CLIMB3) {
-            temp.HAB = "Level 3";
+        else if (teams.CLIMB1) {
+            temp.HAB = "Level 1";
         }
         else {
             temp.HAB = "None";
@@ -62,8 +63,16 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
         return temp;
     }
     $scope.sendNew = function (teamData) {
-        $http.post(url, JSON.stringify(teamData));
-        $scope.teamList.push($scope.teamConverion(teamData));
+        $http({
+            method: "POST",
+            url: url,
+            data: JSON.stringify(teamData)
+        }).then(function mySuccess(response) {
+            //console.log(response.data);
+            $scope.loadTeams()
+        }, function myError(response) {
+            console.log(response);
+        });
     }
     //controller for new team dialog
     function DialogController($scope, $mdDialog) {
@@ -74,24 +83,109 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
         $scope.cancel = function () {
             $mdDialog.cancel();
         };
-
         $scope.answer = function () {
             var newTeamValues = {
                 "NUM": document.querySelector('#teamId').value,
                 "NAME": document.querySelector('#name').value,
-                "RCKT_CARGO_H": (document.querySelector('#R_C_High').value) ? "1" : "0",
-                "RCKT_CARGO_M": (document.querySelector('#R_C_Med').value) ? "1" : "0",
-                "RCKT_CARGO_L": (document.querySelector('#R_C_Low').value) ? "1" : "0",
-                "RCKT_HATCH_H": (document.querySelector('#R_H_High').value) ? "1" : "0",
-                "RCKT_HATCH_M": (document.querySelector('#R_H_Med').value) ? "1" : "0",
-                "RCKT_HATCH_L": (document.querySelector('#R_H_Low').value) ? "1" : "0",
-                "CARGO_HATCH": (document.querySelector('#C_Hatchet').value) ? "1" : "0",
-                "CARGO_SCORE": (document.querySelector('#C_Cargo').value) ? "1" : "0",
-                "CARGO_FLOOR": (document.querySelector('#Cargo_floor').value) ? "1" : "0",
-                "HATCH_PASS": (document.querySelector('#Hatchet_passive').value) ? "1" : "0",
+                "RCKT_CARGO_H": (document.querySelector('#R_C_High').checked) ? 1 : 0,
+                "RCKT_CARGO_M": (document.querySelector('#R_C_Med').checked) ? 1 : 0,
+                "RCKT_CARGO_L": (document.querySelector('#R_C_Low').checked) ? 1 : 0,
+                "RCKT_HATCH_H": (document.querySelector('#R_H_High').checked) ? 1 : 0,
+                "RCKT_HATCH_M": (document.querySelector('#R_H_Med').checked) ? 1 : 0,
+                "RCKT_HATCH_L": (document.querySelector('#R_H_Low').checked) ? 1 : 0,
+                "CARGO_HATCH": (document.querySelector('#C_Hatchet').checked) ? 1 : 0,
+                "CARGO_SCORE": (document.querySelector('#C_Cargo').checked) ? 1 : 0,
+                "CARGO_FLOOR": (document.querySelector('#Cargo_floor').checked) ? 1 : 0,
+                "HATCH_PASS": (document.querySelector('#Hatchet_passive').checked) ? 1 : 0,
+                "CLIMB1": (document.querySelector('#Climb1').checked) ? 1 : 0,
+                "CLIMB2": (document.querySelector('#Climb2').checked) ? 1 : 0,
+                "CLIMB3": (document.querySelector('#Climb3').checked) ? 1 : 0,
                 "Comments": (document.querySelector('#comment').value)                
             }
             $mdDialog.hide(newTeamValues);
+        };
+    }
+    //controller for new team dialog
+    function ViewController($scope, $mdDialog, number) {
+        $scope.selectedTeam;
+        $http(
+            {
+                method: "GET",
+                url: url +"/"+ number
+            }).then(function mySuccess(response)
+            {
+                var team = response.data;
+                $scope.selectedTeam = team;
+                document.querySelector('#teamId').value = team.NUM;
+                document.querySelector('#name').value = team.NAME;
+                document.querySelector('#rank').value = team.RANK;
+                document.querySelector('#R_C_High').checked = team.RCKT_CARGO_H;
+                document.querySelector('#R_C_Med').checked = team.RCKT_CARGO_M;
+                document.querySelector('#R_C_Low').checked = team.RCKT_CARGO_L;
+                document.querySelector('#R_H_High').checked = team.RCKT_CARGO_H;
+                document.querySelector('#R_H_Med').checked = team.RCKT_HATCH_M;
+                document.querySelector('#R_H_Low').checked = team.RCKT_HATCH_L;
+                document.querySelector('#C_Hatchet').checked = team.CARGO_SCORE;
+                document.querySelector('#C_Cargo').checked = team.CARGO_HATCH;
+                document.querySelector('#Cargo_floor').checked = team.CARGO_FLOOR;
+                document.querySelector('#Hatchet_passive').checked = team.HATCH_PASS;
+                document.querySelector('#Climb1').checked = team.CLIMB1,
+                document.querySelector('#Climb2').checked = team.CLIMB2,
+                document.querySelector('#Climb3').checked = team.CLIMB3,
+                document.querySelector('#comment').value = team.Comments;
+            }, function myError(response)
+            {
+                console.log(response);
+            });
+        $scope.hide = function () {
+            $mdDialog.hide();
+        };
+
+        $scope.cancel = function () {
+            $mdDialog.cancel();
+        };
+        $scope.delete = function () {
+            $http(
+                {
+                    method: "DELETE",
+                    url: url + "/" + $scope.selectedTeam.Id
+                }).then(function mySuccess(response) {
+                    console.log("Team Deleted");
+                }, function myError(response) {
+                        console.log(response);
+                });
+            $mdDialog.hide("Deleted");
+        }
+        $scope.answer = function () {
+            var newTeamValues = {
+                "Id": $scope.selectedTeam.Id,
+                "NUM": document.querySelector('#teamId').value,
+                "NAME": document.querySelector('#name').value,
+                "RCKT_CARGO_H": (document.querySelector('#R_C_High').checked) ? 1 : 0,
+                "RCKT_CARGO_M": (document.querySelector('#R_C_Med'). checked) ? 1 : 0,
+                "RCKT_CARGO_L": (document.querySelector('#R_C_Low'). checked) ? 1 : 0,
+                "RCKT_HATCH_H": (document.querySelector('#R_H_High'). checked) ? 1 : 0,
+                "RCKT_HATCH_M": (document.querySelector('#R_H_Med'). checked) ? 1 : 0,
+                "RCKT_HATCH_L": (document.querySelector('#R_H_Low'). checked) ? 1 : 0,
+                "CARGO_HATCH": (document.querySelector('#C_Hatchet'). checked) ? 1 : 0,
+                "CARGO_SCORE": (document.querySelector('#C_Cargo'). checked) ? 1 : 0,
+                "CARGO_FLOOR": (document.querySelector('#Cargo_floor'). checked) ? 1 : 0,
+                "HATCH_PASS": (document.querySelector('#Hatchet_passive').checked) ? 1 : 0,
+                "CLIMB1": (document.querySelector('#Climb1').checked) ? 1 : 0,
+                "CLIMB2": (document.querySelector('#Climb2').checked) ? 1 : 0,
+                "CLIMB3": (document.querySelector('#Climb3').checked) ? 1 : 0,
+                "Comments": (document.querySelector('#comment').value)
+            }
+            $http({
+                method: "PUT",
+                url: url + "/" + newTeamValues.Id,
+                data: JSON.stringify(newTeamValues)
+            }).then(function mySuccess(response) {
+                console.log("updated");
+            }, function myError(response) {
+                console.log(response);
+            });
+            $mdDialog.hide("update", newTeamValues);
         };
     }
     $scope.showAdvanced = function (ev) {
@@ -110,6 +204,28 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
                 // $scope.status = 'You cancelled the dialog.';
             });
     };
+    $scope.view = function (ev, num) {
+        $mdDialog.show({
+            locals: { number: num },
+            controller: ViewController,
+            templateUrl: '/pages/ViewTeam.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        })
+            .then(function (answer, teamData) {
+                if (answer === "Deleted") {
+                    $scope.loadTeams();
+                }
+                else if (answer === "update") {
+                    $scope.loadTeams()
+                }
+
+            }, function () {
+                // $scope.status = 'You cancelled the dialog.';
+            });
+    }
 
     $scope.loadTeams();
 });

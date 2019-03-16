@@ -3,49 +3,51 @@
 }
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "WRATH Scouting";
 }
 
-<div ng-app="myApp" ng-controller="myCtrl">
-    <p>
+<div ng-app="myApp" ng-controller="myCtrl" style="height: 300px">
 
-    </p>
-    <div layout="row" ng-cloak style="height: 300px">
+    <div id="left" layout="column" layout-align="center center" class="md-padding">
+    </div>
 
-
-        <div id="left" layout="column" layout-align="center center" class="md-padding">
-        </div>
-
-        <div layout="column" layout-align="center start" layout-padding flex>
-            <div class="dialog-demo-content" layout="column" layout-align="left center" style="width:100%">
-                <h1>FRC Deep Space Scouting 2019 {{status}}</h1>
-                <div id="div_VenueList">
-                    <table class="table table-striped">
-                        <md-button flex="15" align="left" style="background-color:black;" class="md-primary md-raised" ng-click="showAdvanced($event)">
-                            New team
-                        </md-button>
-                        <tr>
-                            <td>#</td>
-                            <td>Name</td>
-                            <td>Rocket</td>
-                            <td>Ship</td>
-                            <td>HAB</td>
-                        </tr>
-                        <tr ng-repeat="team in teamList">
+    <div  layout="column" layout-align="center start" layout-padding flex>
+        <div  layout="column" layout-align="left center" style="width:100%">
+            <h2>Deep Space 2019 Scouting</h2>
+            
+            <div id="div_VenueList">
+                <table class="table table-striped">
+                    <md-button flex="15" align="left" style="background-color:black;" class="md-primary md-raised" ng-click="showAdvanced($event)">
+                        New team
+                    </md-button>
+                    <md-button flex="15" align="left" style="background-color:black;" class="md-primary md-raised" ng-click="loadTeams()">
+                        <img src="~/img/icons8-synchronize-30.png">
+                        
+                    </md-button>
+                    
+                    <tr style="word-wrap: break-word">
+                        <td>Team #</td>
+                        <td>Rank</td>
+                        <td>Rocket</td>
+                        <td>Ship</td>
+                        <td>HAB</td>
+                    </tr>
+                    <tbody style="display: block; height: 100%; overflow-y: scroll">
+                        <tr ng-repeat="team in teamList | orderBy" style="word-wrap: break-word" ng-click="view($event, team.ID)">
                             <td>{{team.NUM}}</td>
-                            <td>{{team.NAME}}</td>
+                            <td>{{team.RANK}}</td>
                             <td>{{team.ROCKET}}</td>
                             <td>{{team.SHIP}}</td>
                             <td>{{team.HAB}}</td>
                         </tr>
-                    </table>
+                    </tbody>
+                </table>
 
-                </div>
             </div>
-
         </div>
 
-        <div id="right" layout="column" layout-align="center center" class="md-padding">
-        </div>
+    </div>
+
+    <div id="right" layout="column" layout-align="center center" class="md-padding">
     </div>
 </div>
