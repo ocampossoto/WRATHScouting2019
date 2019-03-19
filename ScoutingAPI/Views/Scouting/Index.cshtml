@@ -22,12 +22,11 @@
                     </md-button>
                     <md-button flex="15" align="left" style="background-color:black;" class="md-primary md-raised" ng-click="loadTeams()">
                         <img src="~/img/icons8-synchronize-30.png">
-                        
                     </md-button>
-                    
+                    <label>{{updateTime}}</label>
                     <tr style="word-wrap: break-word">
-                        <td>Team #</td>
-                        <td>Rank</td>
+                        <td ng-click="sortByNumber()">Team #</td>
+                        <td ng-click="sortByRank()">Rank</td>
                         <td>Rocket</td>
                         <td>Ship</td>
                         <td>HAB</td>

@@ -24,18 +24,18 @@ namespace ScoutingAPI.Controllers
         // GET: api/SCOUTING2019
         public IQueryable<SCOUTING2019> GetSCOUTING2019()
         {
-            IQueryable<SCOUTING2019> teamList = db.SCOUTING2019;//  db.SCOUTING2019;
-            foreach (SCOUTING2019 team in teamList)
-            {
-                dynamic result = WebRequest("frc" + team.NUM.ToString());
-                if (result != null)
-                {
-                    int rank = result.qual.ranking.rank;
-                    team.RANK = rank; 
-                }
-                Console.Write(team.NUM);
-            }
-            db.SaveChanges();
+            //IQueryable<SCOUTING2019> teamList = db.SCOUTING2019;//  db.SCOUTING2019;
+            //foreach (SCOUTING2019 team in teamList)
+            //{
+            //    dynamic result = WebRequest("frc" + team.NUM.ToString());
+            //    if (result != null)
+            //    {
+            //        int rank = result.qual.ranking.rank;
+            //        team.RANK = rank; 
+            //    }
+            //    Console.Write(team.NUM);
+            //}
+            //db.SaveChanges();
             //Thread t1 = new Thread(RequestWrapper);
             //t1.Start();
             return db.SCOUTING2019;

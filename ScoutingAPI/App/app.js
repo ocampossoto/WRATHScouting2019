@@ -5,9 +5,35 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
     $scope.lastName = "Doe";
     $scope.status = "Good";
     $scope.teamList = [];
+    $scope.updateTime = "Updating...";
+    $scope.NumState = false;
+    $scope.RankState = false;
+
+    $scope.sortByNumber = function () {
+        $scope.NumState = !$scope.NumState;
+        if ($scope.NumState) {
+            $scope.teamList.sort(function (a, b) { return a.NUM - b.NUM });
+        }
+        else {
+            $scope.teamList.sort(function (a, b) { return b.NUM - a.NUM });
+        }
+
+        
+    };
+    $scope.sortByRank = function () {
+        $scope.RankState = !$scope.RankState;
+        if ($scope.RankState) {
+            $scope.teamList.sort(function (a, b) { return a.RANK - b.RANK });
+        }
+        else {
+            $scope.teamList.sort(function (a, b) { return b.RANK - a.RANK });
+        }
+        
+    }
     //var url = 'http://localhost:61505/api/SCOUTING2019';
     var url = 'https://scoutingdataapi.azurewebsites.net/api/SCOUTING2019';
     $scope.loadTeams = function () {
+        $scope.updateTime = "Updating...";
         $http({
             method: "GET",
             url: url
@@ -20,10 +46,21 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
                 $scope.teamList.push(team);
             }
             $scope.teamList.sort(function (a, b) { return a.RANK - b.RANK });
+            var date = new Date();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var seconds = date.getSeconds();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            $scope.updateTime = date.getMonth() + 1 + "/" + date.getDate() + " " + hours + ":" + minutes + ":" + seconds + " " + ampm;
         }, function myError(response) {
             console.log(response);
             });
-        
+       
+
     }
     $scope.teamConverion = function (teams) {
         var temp = { "ID": teams.Id, "NUM": teams.NUM, "RANK": teams.RANK, "COMMENTS": teams.Comments.substring(0, 10) + "..." };
