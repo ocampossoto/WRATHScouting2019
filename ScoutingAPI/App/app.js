@@ -8,6 +8,22 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
     $scope.updateTime = "Updating...";
     $scope.NumState = false;
     $scope.RankState = false;
+    $scope.scouting = sessionStorage.getItem("currentpage") === "true";
+    $scope.setPage = function () {
+        if ($scope.scouting) {
+            $scope.page = "Scouting";
+        }
+        else {
+            $scope.page = "Matches";
+        }
+    }
+
+    $scope.showScreen = function () {
+        $scope.scouting = !$scope.scouting;
+        $scope.setPage();
+        sessionStorage.setItem("currentpage", $scope.scouting);
+        console.log(sessionStorage.getItem("currentpage"));
+    };
 
     $scope.sortByNumber = function () {
         $scope.NumState = !$scope.NumState;
@@ -30,6 +46,24 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
         }
         
     }
+    $scope.loadMatches = function () {
+        $http({
+            method: "GET",
+            url: "https://www.thebluealliance.com/api/v3/team/frc1847/event/2018mokc2/matches/simple",
+            headers: { 'X-TBA-Auth-Key': 'OS42lUa6MsZEhUe4wnVmmlHJ1NA8ztHt6PvcDss3XB2Jt7J159khwBzQSmwEinvl' }
+        }).then(function mySuccess(response) {
+            $scope.matchList = [];
+            var matches = response.data;
+            
+            for (var i = 0; i < matches.length; i++) {                  
+                var match = $scope.matchDataconversion(matches[i]);
+                $scope.matchList.push(match);
+            }
+        }, function myError(response) {
+            console.log(response);
+        });
+    }
+    $scope.loadMatches();
     //var url = 'http://localhost:61505/api/SCOUTING2019';
     var url = 'https://scoutingdataapi.azurewebsites.net/api/SCOUTING2019';
     $scope.loadTeams = function () {
@@ -58,10 +92,9 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
             $scope.updateTime = date.getMonth() + 1 + "/" + date.getDate() + " " + hours + ":" + minutes + ":" + seconds + " " + ampm;
         }, function myError(response) {
             console.log(response);
-            });
-       
+        });
 
-    }
+    };
     $scope.teamConverion = function (teams) {
         var temp = { "ID": teams.Id, "NUM": teams.NUM, "RANK": teams.RANK, "COMMENTS": teams.Comments.substring(0, 10) + "..." };
         //check if we can do the rocket at all
@@ -96,6 +129,39 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
         }
         else {
             temp.HAB = "None";
+        }
+        return temp;
+    }
+    $scope.matchDataconversion = function (match) {
+        var date = new Date(match.time * 1000);
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var seconds = date.getSeconds();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        var color;
+        if (match.alliances.red.team_keys[0].replace("frc", '') === '1847' ||
+            match.alliances.red.team_keys[1].replace("frc", '') === '1847' ||
+            match.alliances.red.team_keys[2].replace("frc", '') === '1847') {
+            color = { "background-color": "#fdd","width": "40 %;" };
+        }
+        else {
+            color = {
+                "background-color": "#ddf","width": "40 %;"};
+        }
+        temp = {
+            num: match.match_number,
+            time: date.getMonth() + 1 + "/" + date.getDate() + " " + hours + ":" + minutes + " " + ampm,
+            color: color,
+            red1: match.alliances.red.team_keys[0].replace("frc", ''),
+            red2: match.alliances.red.team_keys[1].replace("frc", ''),
+            red3: match.alliances.red.team_keys[2].replace("frc", ''),
+            blue1: match.alliances.blue.team_keys[0].replace("frc", ''),
+            blue2: match.alliances.blue.team_keys[1].replace("frc", ''),
+            blue3: match.alliances.blue.team_keys[2].replace("frc", '')
         }
         return temp;
     }
@@ -265,6 +331,7 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
     }
 
     $scope.loadTeams();
+    $scope.setPage();
 });
 
 /*

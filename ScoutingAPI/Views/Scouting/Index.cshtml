@@ -7,23 +7,27 @@
 }
 
 <div ng-app="myApp" ng-controller="myCtrl" style="height: 300px">
-
+    <div layout="column" layout-align="left center" style="width:100%">
+        
+    </div>
     <div id="left" layout="column" layout-align="center center" class="md-padding">
     </div>
 
-    <div  layout="column" layout-align="center start" layout-padding flex>
-        <div  layout="column" layout-align="left center" style="width:100%">
-            <h2>Deep Space 2019 Scouting</h2>
-            
-            <div id="div_VenueList">
-                <table class="table table-striped">
-                    <md-button flex="15" align="left" style="background-color:black;" class="md-primary md-raised" ng-click="showAdvanced($event)">
-                        New team
-                    </md-button>
-                    <md-button flex="15" align="left" style="background-color:black;" class="md-primary md-raised" ng-click="loadTeams()">
-                        <img src="~/img/icons8-synchronize-30.png">
-                    </md-button>
-                    <label>{{updateTime}}</label>
+    <div layout="column" layout-align="center start" layout-padding flex>
+        <div layout="column" layout-align="left center" style="width:100%">
+            <h2>Deep Space 2019</h2>
+            <div id="div_teamdata">
+                <md-button ng-hide="scouting" flex="15" align="left" style="background-color:black;" class="md-primary md-raised" ng-click="showAdvanced($event)">
+                    New team
+                </md-button>
+                <md-button ng-hide="scouting" flex="15" align="left" style="background-color:black;" class="md-primary md-raised" ng-click="loadTeams()">
+                    <img src="~/img/icons8-synchronize-30.png">
+                </md-button>
+                <label ng-hide="scouting" align="left">{{updateTime}}</label>
+                <md-button id="display" flex="15" style="background-color:black;" class="md-primary md-raised" ng-click="showScreen()">
+                    {{page}}
+                </md-button>
+                <table ng-hide="scouting" class="table table-striped">
                     <tr style="word-wrap: break-word">
                         <td ng-click="sortByNumber()">Team #</td>
                         <td ng-click="sortByRank()">Rank</td>
@@ -41,7 +45,28 @@
                         </tr>
                     </tbody>
                 </table>
-
+                <table ng-hide="!scouting" class="table table-striped">
+                    <thead>
+                        <tr style="word-wrap: break-word">
+                            <th style="width: 15%;">Match</th>
+                            <th style="width: 15%">Time</th>
+                            <th >Red Alliance</th>
+                            <th >Blue Alliance</th>
+                        </tr>
+                    </thead>
+                    <tbody style="display: block; height: 100%; overflow-y: scroll">
+                        <tr ng-repeat="match in matchList"  style="word-wrap: break-word">
+                            <td ng-style="match.color">{{match.num}}</td>
+                            <td>{{match.time}}</td>
+                            <td style="background-color:#fdd">{{match.red1}}</td>
+                            <td style="background-color:#fdd">{{match.red2}}</td>
+                            <td style="background-color:#fdd">{{match.red3}}</td>
+                            <td style="background-color:#ddf">{{match.blue1}}</td>
+                            <td style="background-color:#ddf">{{match.blue2}}</td>
+                            <td style="background-color:#ddf">{{match.blue3}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -49,4 +74,6 @@
 
     <div id="right" layout="column" layout-align="center center" class="md-padding">
     </div>
+
+
 </div>
