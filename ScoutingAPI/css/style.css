@@ -99,12 +99,12 @@ tbody {
     display: inline-block;
 }
 
-    thead > tr, tbody > tr, tfoot > tr {
-        text-align: left;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-    }
+thead > tr, tbody > tr, tfoot > tr {
+    text-align: left;
+    /*display: flex;*/
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
 
 thead, tfoot {
     flex-shrink: 0;
@@ -112,8 +112,8 @@ thead, tfoot {
 
 th, tbody td {
     width: 50%; /* this can vary */
-    overflow-x: hidden;
-    text-overflow: ellipsis;
+    /*overflow-x: hidden;
+    text-overflow: ellipsis;*/
     display: inline-block;
 }
 
@@ -124,4 +124,13 @@ tfoot {
 tfoot td {
     width: 100vh;
     display: inline-block;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+ 
+    text-align: center;
 }

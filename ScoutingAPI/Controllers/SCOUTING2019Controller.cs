@@ -34,16 +34,16 @@ namespace ScoutingAPI.Controllers
                     {
                         int rank = result.qual.ranking.rank;
                         team.RANK = rank;
-                    }catch(Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         Console.Write(ex.Message);
                         break;
                     }
                 }
-                    
+
                 db.SaveChanges();
             }
-
             return db.SCOUTING2019;
         }
 

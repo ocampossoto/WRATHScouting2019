@@ -23,20 +23,21 @@
                 <md-button ng-hide="scouting" flex="15" align="left" style="background-color:black;" class="md-primary md-raised" ng-click="loadTeams()">
                     <img src="~/img/icons8-synchronize-30.png">
                 </md-button>
-                <label ng-hide="scouting" align="left">{{updateTime}}</label>
+
                 <md-button id="display" flex="15" style="background-color:black;" class="md-primary md-raised" ng-click="showScreen()">
                     {{page}}
                 </md-button>
+                <label ng-hide="scouting" align="left">{{updateTime}}</label>
                 <table ng-hide="scouting" class="table table-striped">
-                    <tr style="word-wrap: break-word">
+                    <tr style="word-wrap: break-word; display: flex; ">
                         <td ng-click="sortByNumber()">Team #</td>
                         <td ng-click="sortByRank()">Rank</td>
                         <td>Rocket</td>
                         <td>Ship</td>
                         <td>HAB</td>
                     </tr>
-                    <tbody style="display: block; height: 100%; overflow-y: scroll">
-                        <tr ng-repeat="team in teamList | orderBy" style="word-wrap: break-word" ng-click="view($event, team.ID)">
+                    <tbody style="display: block; height: 100%; overflow-y: scroll; ">
+                        <tr ng-repeat="team in teamList | orderBy" style="word-wrap: break-word;display: flex;" ng-click="view($event, team.ID)">
                             <td>{{team.NUM}}</td>
                             <td>{{team.RANK}}</td>
                             <td>{{team.ROCKET}}</td>
@@ -45,25 +46,27 @@
                         </tr>
                     </tbody>
                 </table>
-                <table ng-hide="!scouting" class="table table-striped">
-                    <thead>
+                <table ng-hide="!scouting" class="table">
+                    <div ng-hide="!scouting || matchData"><h3>No Match Data Yet<br /> Check On <a href="https://www.thebluealliance.com/event/2019mokc">The Blue Alliance?</a></h3></div>
+                    <tbody ng-hide="!matchData" style="display: block; height: 100%; width:100%;">
                         <tr style="word-wrap: break-word">
-                            <th style="width: 15%;">Match</th>
-                            <th style="width: 15%">Time</th>
-                            <th >Red Alliance</th>
-                            <th >Blue Alliance</th>
+                            <td  class="col-2" ng-click="sortByMatch()"><b>Match</b></td>
+                            <td class="col-2" ng-click="sortByTime()"><b>Time</b></td>
+                            <td class="col-2"><b>Red Alliance</b></td>
+                            <td class="col-2">&nbsp;</td>
+                            <td class="col-2">&nbsp;</td>
+                            <td class="col-2"><b>Blue Alliance</b></td>
                         </tr>
-                    </thead>
-                    <tbody style="display: block; height: 100%; overflow-y: scroll">
-                        <tr ng-repeat="match in matchList"  style="word-wrap: break-word">
-                            <td ng-style="match.color">{{match.num}}</td>
-                            <td>{{match.time}}</td>
-                            <td style="background-color:#fdd">{{match.red1}}</td>
-                            <td style="background-color:#fdd">{{match.red2}}</td>
-                            <td style="background-color:#fdd">{{match.red3}}</td>
-                            <td style="background-color:#ddf">{{match.blue1}}</td>
-                            <td style="background-color:#ddf">{{match.blue2}}</td>
-                            <td style="background-color:#ddf">{{match.blue3}}</td>
+                        <tr ng-repeat="match in matchList" style="word-wrap: break-word">
+                            <td class="col-2" ng-style="match.color" >{{match.num}}</td>
+                            <td class="col-2" >{{match.time}}</td>
+                            <td class="col-2" style="background-color:#fdd">{{match.red1}}<b>{{match.red1Bold}}</b></td>
+                            <td class="col-2" style="background-color:#fdd">{{match.red2}}<b>{{match.red2Bold}}</b></td>
+                            <td class="col-2" style="background-color:#fdd">{{match.red3}}<b>{{match.red3Bold}}</b></td>
+                            <td class="col-2" style="background-color:#ddf">{{match.blue1}}<b>{{match.blue1Bold}}</b></td>
+                            <td class="col-2" style="background-color:#ddf">{{match.blue2}}<b>{{match.blue2Bold}}</b></td>
+                            <td class="col-2" style="background-color:#ddf">{{match.blue3}}<b>{{match.blue3Bold}}</b></td>
+
                         </tr>
                     </tbody>
                 </table>

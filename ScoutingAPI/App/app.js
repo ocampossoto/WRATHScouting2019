@@ -8,6 +8,8 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
     $scope.updateTime = "Updating...";
     $scope.NumState = false;
     $scope.RankState = false;
+    $scope.MatchState = false;
+    $scope.TimehState = false;
     $scope.scouting = sessionStorage.getItem("currentpage") === "true";
     $scope.setPage = function () {
         if ($scope.scouting) {
@@ -39,17 +41,46 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
     $scope.sortByRank = function () {
         $scope.RankState = !$scope.RankState;
         if ($scope.RankState) {
+            $scope.teamList.sort(function (a, b) { return a.num - b.num });
+        }
+        else {
+            $scope.teamList.sort(function (a, b) { return b.num - a.num });
+        }
+        
+    }
+    $scope.sortByRank = function () {
+        $scope.RankState = !$scope.RankState;
+        if ($scope.RankState) {
             $scope.teamList.sort(function (a, b) { return a.RANK - b.RANK });
         }
         else {
             $scope.teamList.sort(function (a, b) { return b.RANK - a.RANK });
         }
-        
+
+    }
+    $scope.sortByMatch = function () {
+        $scope.MatchState = !$scope.MatchState;
+        if ($scope.MatchState) {
+            $scope.matchList.sort(function (a, b) { return (a.num.replace("Qual. ", '')) - (b.num.replace("Qual. ", '')) });
+        }
+        else {
+            $scope.matchList.sort(function (a, b) { return (b.num.replace("Qual. ", '')) - (a.num.replace("Qual. ", '')) });
+        }
+    }
+    $scope.sortByTime = function () {
+        $scope.TimehState = !$scope.TimehState;
+        console.log("Sorting");
+        if ($scope.TimehState) {
+            $scope.matchList.sort(function (a, b) { return a.utc_time - b.utc_time });
+        }
+        else {
+            $scope.matchList.sort(function (a, b) { return b.utc_time - a.utc_time });
+        }
     }
     $scope.loadMatches = function () {
         $http({
             method: "GET",
-            url: "https://www.thebluealliance.com/api/v3/team/frc1847/event/2018mokc2/matches/simple",
+            url: "https://www.thebluealliance.com/api/v3/team/frc1847/event/2019mokc/matches/simple",
             headers: { 'X-TBA-Auth-Key': 'OS42lUa6MsZEhUe4wnVmmlHJ1NA8ztHt6PvcDss3XB2Jt7J159khwBzQSmwEinvl' }
         }).then(function mySuccess(response) {
             $scope.matchList = [];
@@ -58,14 +89,28 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
             for (var i = 0; i < matches.length; i++) {                  
                 var match = $scope.matchDataconversion(matches[i]);
                 $scope.matchList.push(match);
+               
+                
+            }
+            $scope.matchList.sort(function (a, b) { return b.utc_time - a.utc_time });
+            //console.log($scope.matchList);
+            if ($scope.matchList === null || $scope.matchList.length === 0) {
+                //console.log($scope.matchList, "empty");
+                $scope.matchData = false;
+            }
+            else {
+               // console.log($scope.matchList);
+                $scope.matchData = true;
             }
         }, function myError(response) {
             console.log(response);
-        });
+            });
+        
+        
     }
     $scope.loadMatches();
     //var url = 'http://localhost:61505/api/SCOUTING2019';
-    var url = 'https://scoutingdataapi.azurewebsites.net/api/SCOUTING2019';
+    var url = 'https://scoutingdataapi.azurewebsites.net/api/SCOUTING2019/';
     $scope.loadTeams = function () {
         $scope.updateTime = "Updating...";
         $http({
@@ -89,12 +134,14 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
             hours = hours ? hours : 12; // the hour '0' should be '12'
             minutes = minutes < 10 ? '0' + minutes : minutes;
             seconds = seconds < 10 ? '0' + seconds : seconds;
-            $scope.updateTime = date.getMonth() + 1 + "/" + date.getDate() + " " + hours + ":" + minutes + ":" + seconds + " " + ampm;
-        }, function myError(response) {
-            console.log(response);
-        });
+            $scope.updateTime = "Updated: " + (date.getMonth() + 1) + "/" + date.getDate() + " " + hours + ":" + minutes + ":" + seconds + " " + ampm;
+            }, function myError(response) {
+                
+                console.log(response);
 
-    };
+            });
+    }
+
     $scope.teamConverion = function (teams) {
         var temp = { "ID": teams.Id, "NUM": teams.NUM, "RANK": teams.RANK, "COMMENTS": teams.Comments.substring(0, 10) + "..." };
         //check if we can do the rocket at all
@@ -132,6 +179,24 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
         }
         return temp;
     }
+    $scope.checkTeam = function (team, invert) {
+        if (invert) {
+            if (team === "1847") {
+                return team;
+            }
+            else {
+                return "";
+            }
+        }
+        else {
+            if (team === "1847") {
+                return "";
+            }
+            else {
+                return team;
+            }
+        }
+    }
     $scope.matchDataconversion = function (match) {
         var date = new Date(match.time * 1000);
         var hours = date.getHours();
@@ -140,28 +205,52 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
         var ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
+        hours = hours < 10 ? '0' + hours : hours
         minutes = minutes < 10 ? '0' + minutes : minutes;
         seconds = seconds < 10 ? '0' + seconds : seconds;
         var color;
+        var matchType;
         if (match.alliances.red.team_keys[0].replace("frc", '') === '1847' ||
             match.alliances.red.team_keys[1].replace("frc", '') === '1847' ||
             match.alliances.red.team_keys[2].replace("frc", '') === '1847') {
-            color = { "background-color": "#fdd","width": "40 %;" };
+            color = { "background-color": "#fdd", "width": "40 %;", "font-weight": "bold;"};
         }
         else {
             color = {
                 "background-color": "#ddf","width": "40 %;"};
         }
+        if (match.comp_level === "f") {
+            matchType = "Finals ";
+        }
+        else if (match.comp_level === "sf") {
+            matchType = "Semi. ";
+        }
+        else if (match.comp_level === "qf") {
+            matchType = "Quart. ";
+        }
+        else if (match.comp_level === "ef") {
+            matchType = "Extra";
+        }
+        else {
+            matchType = "Qual. ";
+        }
         temp = {
-            num: match.match_number,
-            time: date.getMonth() + 1 + "/" + date.getDate() + " " + hours + ":" + minutes + " " + ampm,
+            utc_time: match.time,
+            num: matchType + match.match_number,
+            time: (date.getMonth() + 1) + "/" + date.getDate() + " " + hours + ":" + minutes + " " + ampm,
             color: color,
-            red1: match.alliances.red.team_keys[0].replace("frc", ''),
-            red2: match.alliances.red.team_keys[1].replace("frc", ''),
-            red3: match.alliances.red.team_keys[2].replace("frc", ''),
-            blue1: match.alliances.blue.team_keys[0].replace("frc", ''),
-            blue2: match.alliances.blue.team_keys[1].replace("frc", ''),
-            blue3: match.alliances.blue.team_keys[2].replace("frc", '')
+            red1: $scope.checkTeam(match.alliances.red.team_keys[0].replace("frc", ''), false),
+            red2: $scope.checkTeam(match.alliances.red.team_keys[1].replace("frc", ''), false),
+            red3: $scope.checkTeam(match.alliances.red.team_keys[2].replace("frc", ''), false),
+            blue1: $scope.checkTeam(match.alliances.blue.team_keys[0].replace("frc", ''), false),
+            blue2: $scope.checkTeam(match.alliances.blue.team_keys[1].replace("frc", ''), false),
+            blue3: $scope.checkTeam(match.alliances.blue.team_keys[2].replace("frc", ''), false),
+            red1Bold: $scope.checkTeam(match.alliances.red.team_keys[0].replace("frc", ''), true),
+            red2Bold: $scope.checkTeam(match.alliances.red.team_keys[1].replace("frc", ''), true),
+            red3Bold: $scope.checkTeam(match.alliances.red.team_keys[2].replace("frc", ''), true),
+            blue1Bold: $scope.checkTeam(match.alliances.blue.team_keys[0].replace("frc", ''), true),
+            blue2Bold: $scope.checkTeam(match.alliances.blue.team_keys[1].replace("frc", ''), true),
+            blue3Bold: $scope.checkTeam(match.alliances.blue.team_keys[2].replace("frc", ''), true),
         }
         return temp;
     }
@@ -211,6 +300,7 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
     //controller for new team dialog
     function ViewController($scope, $mdDialog, number) {
         $scope.selectedTeam;
+        console.log(number);
         $http(
             {
                 method: "GET",
@@ -218,6 +308,7 @@ app.controller('myCtrl', function ($scope, $http, $mdDialog) {
             }).then(function mySuccess(response)
             {
                 var team = response.data;
+                console.log(response.data);
                 $scope.selectedTeam = team;
                 document.querySelector('#teamId').value = team.NUM;
                 document.querySelector('#name').value = team.NAME;
